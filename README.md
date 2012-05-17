@@ -9,7 +9,7 @@ Attributes
 For example, to create "authorized_keys" for user "root" from data bag user "user1", use:
 
     "ssh_keys": {
-        "root": "user1"
+      "root": "user1"
     }
 
 Usage
