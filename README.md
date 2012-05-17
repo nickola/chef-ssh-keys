@@ -6,7 +6,7 @@ Creates "authorized_keys" in user "~/.ssh" directory from a data bag.
 Attributes
 ==========
 
-For example, to set "authorized_keys" for user "root" from data bag user "user1", use:
+For example, to create "authorized_keys" for user "root" from data bag user "user1", use:
 
     "ssh_keys": {
         "root": "user1"
