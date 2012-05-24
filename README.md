@@ -1,25 +1,32 @@
 Description
 ===========
 
-Creates "authorized_keys" in user "~/.ssh" directory from a data bag.
+Creates `authorized_keys` in user `~/.ssh` directory from a data bag.
 
 Attributes
 ==========
 
-For example, to create "authorized_keys" for user "root" from data bag user "user1", use:
-
-    "ssh_keys": {
-      "root": "user1"
-    }
+Expects `node['ssh_keys']` to be an hash containing the user name as key and data bag user name as value.
 
 Usage
 =====
+
+Node configuration example to create `authorized_keys` for user `root` from data bag user `user1`:
+
+    {
+      "ssh_keys": {
+          "root": "user1"
+        }
+      "run_list": [
+        "recipe[ssh-keys]"
+      ]
+    }
 
 Use knife to create a data bag for users:
 
     knife data bag create users
 
-Create a user:
+User data bag example (compatible with with Chef [users cookbook](https://github.com/opscode-cookbooks/users)):
 
     knife data bag users user1
     {
