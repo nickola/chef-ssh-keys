@@ -15,8 +15,8 @@ Node configuration example to create `authorized_keys` for user `root` from data
 
     {
       "ssh_keys": {
-          "root": "user1"
-        }
+        "root": "user1"
+      },
       "run_list": [
         "recipe[ssh-keys]"
       ]
