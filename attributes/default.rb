@@ -1,1 +1,0 @@
-default[:ssh_keys] = {}
