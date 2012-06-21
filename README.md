@@ -47,6 +47,6 @@ User data bag example (compatible with with Chef [users cookbook](https://github
 
     knife data bag users user2
     {
-      "id": "user1",
+      "id": "user2",
       "ssh_keys": "ssh-rsa AAAAB3Nz...5D8F== user2"
     }
