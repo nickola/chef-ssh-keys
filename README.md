@@ -6,7 +6,7 @@ Creates `authorized_keys` in user `~/.ssh` directory from a data bag.
 Attributes
 ==========
 
-Expects `node['ssh_keys']` to be an hash containing the user name as key and data bag user name as value.
+Expects `node[:ssh_keys]` to be an hash containing the user name as key and data bag user name as value.
 
 Usage
 =====
