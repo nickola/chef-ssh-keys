@@ -10,12 +10,16 @@ if node[:ssh_keys]
       # Preparing SSH keys
       ssh_keys = []
 
-      authorized_keys_file = "#{user['dir']}/.ssh/authorized_keys"
+      if node['ssh_keys']['keep_existing_keys']
+        authorized_keys_file = "#{user['dir']}/.ssh/authorized_keys"
 
-      if File.exist?(authorized_keys_file)
-        File.open(authorized_keys_file).each do |l|
-          if l.start_with?("ssh")
-            ssh_keys += Array(l.delete "\n")
+        if File.exist?(authorized_keys_file)
+          Chef::Log.info("Keep authorized keys from #{authorized_keys_file}")
+
+          File.open(authorized_keys_file).each do |l|
+            if l.start_with?("ssh")
+              ssh_keys += Array(l.delete "\n")
+            end
           end
         end
       end
