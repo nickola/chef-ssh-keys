@@ -9,12 +9,21 @@ if node[:ssh_keys]
     if user and user['dir'] and user['dir'] != "/dev/null"
       # Preparing SSH keys
       ssh_keys = []
+
+      File.open("#{user['dir']}/.ssh/authorized_keys").each do |l|
+        if l.start_with?("ssh")
+          ssh_keys += Array(l.delete "\n")
+        end
+      end
+
       Array(bag_users).each do |bag_user|
         data = data_bag_item('users', bag_user)
         if data and data['ssh_keys']
           ssh_keys += Array(data['ssh_keys'])
         end
       end
+
+      ssh_keys.uniq!
 
       # Saving SSH keys
       if ssh_keys.length > 0
