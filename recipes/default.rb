@@ -10,6 +10,13 @@ if node[:ssh_keys]
       # Preparing SSH keys
       ssh_keys = []
 
+      Array(bag_users).each do |bag_user|
+        data = data_bag_item('users', bag_user)
+        if data and data['ssh_keys']
+          ssh_keys += Array(data['ssh_keys'])
+        end
+      end
+
       if node['ssh_keys']['keep_existing_keys']
         authorized_keys_file = "#{user['dir']}/.ssh/authorized_keys"
 
@@ -21,17 +28,10 @@ if node[:ssh_keys]
               ssh_keys += Array(l.delete "\n")
             end
           end
+
+          ssh_keys.uniq!
         end
       end
-
-      Array(bag_users).each do |bag_user|
-        data = data_bag_item('users', bag_user)
-        if data and data['ssh_keys']
-          ssh_keys += Array(data['ssh_keys'])
-        end
-      end
-
-      ssh_keys.uniq!
 
       # Saving SSH keys
       if ssh_keys.length > 0
