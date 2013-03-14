@@ -39,14 +39,14 @@ if node[:ssh_keys]
 
         # Creating ".ssh" directory
         directory "#{home_dir}/.ssh" do
-          owner user['id']
+          owner user['uid']
           group user['gid'] || user['id']
           mode "0700"
         end
 
         # Creating "authorized_keys"
         template "#{home_dir}/.ssh/authorized_keys" do
-          owner user['id']
+          owner user['uid']
           group user['gid'] || user['id']
           mode "0600"
           variables :ssh_keys => ssh_keys
