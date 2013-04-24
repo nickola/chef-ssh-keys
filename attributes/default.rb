@@ -1,1 +1,1 @@
-default['ssh_keys']['keep_existing_keys']  = true
+default[:ssh_keys_keep_existing] = true

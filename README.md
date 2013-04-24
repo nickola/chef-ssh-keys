@@ -8,6 +8,8 @@ Attributes
 
 Expects `node[:ssh_keys]` to be an hash containing the user name as key and data bag user name as value.
 
+See `attributes/default.rb` for additional attributes default values.
+
 Usage
 =====
 

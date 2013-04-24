@@ -17,37 +17,35 @@ if node[:ssh_keys]
         end
       end
 
-      if node['ssh_keys']['keep_existing_keys']
-        authorized_keys_file = "#{user['dir']}/.ssh/authorized_keys"
+      # Saving SSH keys
+      if ssh_keys.length > 0
+        home_dir = user['dir']
+        authorized_keys_file = "#{home_dir}/.ssh/authorized_keys"
 
-        if File.exist?(authorized_keys_file)
-          Chef::Log.info("Keep authorized keys from #{authorized_keys_file}")
+        if node[:ssh_keys_keep_existing] && File.exist?(authorized_keys_file)
+          Chef::Log.info("Keep authorized keys from: #{authorized_keys_file}")
 
-          File.open(authorized_keys_file).each do |l|
-            if l.start_with?("ssh")
-              ssh_keys += Array(l.delete "\n")
+          # Loading existing keys
+          File.open(authorized_keys_file).each do |line|
+            if line.start_with?("ssh")
+              ssh_keys += Array(line.delete "\n")
             end
           end
 
           ssh_keys.uniq!
-        end
-      end
-
-      # Saving SSH keys
-      if ssh_keys.length > 0
-        home_dir = user['dir']
-
-        # Creating ".ssh" directory
-        directory "#{home_dir}/.ssh" do
-          owner user['uid']
-          group user['gid'] || user['id']
-          mode "0700"
+        else
+          # Creating ".ssh" directory
+          directory "#{home_dir}/.ssh" do
+            owner user['uid']
+            group user['gid'] || user['uid']
+            mode "0700"
+          end
         end
 
         # Creating "authorized_keys"
-        template "#{home_dir}/.ssh/authorized_keys" do
+        template authorized_keys_file do
           owner user['uid']
-          group user['gid'] || user['id']
+          group user['gid'] || user['uid']
           mode "0600"
           variables :ssh_keys => ssh_keys
         end
