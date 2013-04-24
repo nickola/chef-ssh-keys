@@ -9,10 +9,27 @@ if node[:ssh_keys]
     if user and user['dir'] and user['dir'] != "/dev/null"
       # Preparing SSH keys
       ssh_keys = []
+
       Array(bag_users).each do |bag_user|
         data = data_bag_item('users', bag_user)
         if data and data['ssh_keys']
           ssh_keys += Array(data['ssh_keys'])
+        end
+      end
+
+      if node['ssh_keys']['keep_existing_keys']
+        authorized_keys_file = "#{user['dir']}/.ssh/authorized_keys"
+
+        if File.exist?(authorized_keys_file)
+          Chef::Log.info("Keep authorized keys from #{authorized_keys_file}")
+
+          File.open(authorized_keys_file).each do |l|
+            if l.start_with?("ssh")
+              ssh_keys += Array(l.delete "\n")
+            end
+          end
+
+          ssh_keys.uniq!
         end
       end
 
@@ -22,14 +39,14 @@ if node[:ssh_keys]
 
         # Creating ".ssh" directory
         directory "#{home_dir}/.ssh" do
-          owner user['id']
+          owner user['uid']
           group user['gid'] || user['id']
           mode "0700"
         end
 
         # Creating "authorized_keys"
         template "#{home_dir}/.ssh/authorized_keys" do
-          owner user['id']
+          owner user['uid']
           group user['gid'] || user['id']
           mode "0600"
           variables :ssh_keys => ssh_keys
