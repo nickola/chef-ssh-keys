@@ -6,6 +6,9 @@ if node[:ssh_keys]
     # Getting node user data
     user = node['etc']['passwd'][node_user]
 
+    # Defaults for new user
+    user = {'uid' => node_user, 'gid' => node_user, 'dir' => "/home/#{node_user}"} unless user
+
     if user and user['dir'] and user['dir'] != "/dev/null"
       # Preparing SSH keys
       ssh_keys = []
