@@ -37,6 +37,11 @@ if node[:ssh_keys]
       # Saving SSH keys
       if ssh_keys.length > 0
         home_dir = user['dir']
+
+        if not File.exists?(home_dir) and node[:ssh_keys_skip_missing_users]
+          next
+        end
+
         authorized_keys_file = "#{home_dir}/.ssh/authorized_keys"
 
         if node[:ssh_keys_keep_existing] && File.exist?(authorized_keys_file)
