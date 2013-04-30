@@ -13,10 +13,24 @@ if node[:ssh_keys]
       # Preparing SSH keys
       ssh_keys = []
 
-      Array(bag_users).each do |bag_user|
+      if bag_users.kind_of?(Array)
+        bag_users_list = bag_users
+      else
+        bag_users_list = bag_users['users']
+      end
+
+      Array(bag_users_list).each do |bag_user|
         data = data_bag_item('users', bag_user)
         if data and data['ssh_keys']
           ssh_keys += Array(data['ssh_keys'])
+        end
+      end
+
+      if not bag_users.kind_of?(Array) and bag_users['groups'] != nil
+        bag_users['groups'].each do |group_name|
+          search(:users, 'groups:' + group_name) do |user|
+            ssh_keys += Array(user['ssh_keys'])
+          end
         end
       end
 
