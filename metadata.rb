@@ -1,3 +1,4 @@
+name              'ssh-keys'
 maintainer        "Nickolay Kovalev"
 maintainer_email  "nickola@nickola.ru"
 license           "Apache 2.0"
