@@ -47,6 +47,7 @@ if node[:ssh_keys]
 
         # Creating "authorized_keys"
         template authorized_keys_file do
+          source "authorized_keys.erb"
           owner user['uid']
           group user['gid'] || user['uid']
           mode "0600"
