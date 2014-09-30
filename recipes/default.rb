@@ -14,7 +14,10 @@ if node[:ssh_keys]
       ssh_keys = []
 
       Array(bag_users).each do |bag_user|
-        data = data_bag_item('users', bag_user)
+        data = node[:ssh_keys_use_encrypted_data_bag] ?
+          Chef::EncryptedDataBagItem.load('users', bag_user) :
+          data_bag_item('users', bag_user)
+
         if data and data['ssh_keys']
           ssh_keys += Array(data['ssh_keys'])
         end
