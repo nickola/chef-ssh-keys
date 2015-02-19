@@ -7,6 +7,7 @@ Attributes
 ==========
 
 Expects `node[:ssh_keys]` to be an hash containing the user name as key and data bag user name as value.
+Also, users can be defined by groups (see usage examples below).
 
 See `attributes/default.rb` for additional attributes default values.
 
@@ -29,6 +30,28 @@ Node configuration example to create `authorized_keys` for user `root` from data
     {
       "ssh_keys": {
         "root": ["user1", "user2"]
+      },
+      "run_list": [
+        "recipe[ssh-keys]"
+      ]
+    }
+
+Node configuration example to create `authorized_keys` for user `root` from users of group `admin`:
+
+    {
+      "ssh_keys": {
+        "root": {"groups": "admin"}
+      },
+      "run_list": [
+        "recipe[ssh-keys]"
+      ]
+    }
+
+Node configuration example to create `authorized_keys` for user `root` from data bag user `user1` and `user2`, and from users of groups `admin` and `operator`:
+
+    {
+      "ssh_keys": {
+        "root": {"users": ["user1", "user2"], "groups": ["admin", "operator"]}
       },
       "run_list": [
         "recipe[ssh-keys]"
