@@ -1,17 +1,17 @@
 Description
-===========
+-----------
 
 Creates `authorized_keys` in user `~/.ssh` directory from a data bag.
 
 Attributes
-==========
+----------
 
 Expects `node[:ssh_keys]` to be an hash containing the user name as key and data bag user name as value.
 
 See `attributes/default.rb` for additional attributes default values.
 
 Usage
-=====
+-----
 
 Node configuration example to create `authorized_keys` for user `root` from data bag user `user1`:
 
@@ -54,7 +54,7 @@ User data bag example (compatible with Chef [users cookbook](https://github.com/
     }
 
 Cookbook URLs
-=============
+-------------
 
   - GitHub: https://github.com/nickola/chef-ssh-keys
   - Chef Supermarket: https://supermarket.chef.io/cookbooks/ssh-keys
