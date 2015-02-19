@@ -52,3 +52,10 @@ User data bag example (compatible with Chef [users cookbook](https://github.com/
       "id": "user2",
       "ssh_keys": "ssh-rsa AAAAB3Nz...5D8F== user2"
     }
+
+Cookbook URLs
+=============
+
+GitHub: https://github.com/nickola/chef-ssh-keys
+Chef Supermarket: https://supermarket.chef.io/cookbooks/ssh-keys
+Author: http://www.nickola.ru
