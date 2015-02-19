@@ -56,6 +56,6 @@ User data bag example (compatible with Chef [users cookbook](https://github.com/
 Cookbook URLs
 =============
 
-GitHub: https://github.com/nickola/chef-ssh-keys
-Chef Supermarket: https://supermarket.chef.io/cookbooks/ssh-keys
-Author: http://www.nickola.ru
+  - GitHub: https://github.com/nickola/chef-ssh-keys
+  - Chef Supermarket: https://supermarket.chef.io/cookbooks/ssh-keys
+  - Author: http://www.nickola.ru
