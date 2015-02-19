@@ -12,8 +12,17 @@ if node[:ssh_keys]
     if user and user['dir'] and user['dir'] != "/dev/null"
       # Preparing SSH keys
       ssh_keys = []
+      bag_users_list = []
 
-      Array(bag_users).each do |bag_user|
+      if bag_users.kind_of?(String)
+        bag_users_list = Array(bag_users)
+      elsif bag_users.kind_of?(Array)
+        bag_users_list = bag_users
+      else
+        bag_users_list = bag_users['users']
+      end
+
+      Array(bag_users_list).each do |bag_user|
         data = node[:ssh_keys_use_encrypted_data_bag] ?
           Chef::EncryptedDataBagItem.load('users', bag_user) :
           data_bag_item('users', bag_user)
@@ -23,9 +32,22 @@ if node[:ssh_keys]
         end
       end
 
+      if not bag_users.kind_of?(String) and not bag_users.kind_of?(Array) and bag_users['groups'] != nil
+        Array(bag_users['groups']).each do |group_name|
+          search(:users, 'groups:' + group_name) do |user|
+            ssh_keys += Array(user['ssh_keys'])
+          end
+        end
+      end
+
       # Saving SSH keys
       if ssh_keys.length > 0
         home_dir = user['dir']
+
+        if node[:ssh_keys_skip_missing_users] and not File.exists?(home_dir)
+          next
+        end
+
         authorized_keys_file = "#{home_dir}/.ssh/authorized_keys"
 
         if node[:ssh_keys_keep_existing] && File.exist?(authorized_keys_file)
