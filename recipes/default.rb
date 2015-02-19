@@ -44,7 +44,7 @@ if node[:ssh_keys]
       if ssh_keys.length > 0
         home_dir = user['dir']
 
-        if node[:ssh_keys_skip_missing_users] and not File.exists?(home_dir)
+        if node[:ssh_keys_skip_missing_home] and not File.exists?(home_dir)
           next
         end
 
@@ -63,11 +63,19 @@ if node[:ssh_keys]
           ssh_keys.uniq!
         else
           # Creating ".ssh" directory
-          directory "#{home_dir}/.ssh" do
-            owner user['uid']
-            group user['gid'] || user['uid']
-            mode "0700"
-            recursive true
+          if node[:ssh_keys_create_missing_home]
+            directory "#{home_dir}/.ssh" do
+              owner user['uid']
+              group user['gid'] || user['uid']
+              mode "0700"
+              recursive true
+            end
+          else
+            directory "#{home_dir}/.ssh" do
+              owner user['uid']
+              group user['gid'] || user['uid']
+              mode "0700"
+            end
           end
         end
 
