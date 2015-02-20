@@ -1,7 +1,7 @@
 Description
 ===========
 
-Creates `authorized_keys` in user `~/.ssh` directory from a data bag.
+Creates `authorized_keys` in user `~/.ssh` directory from a data bag (encrypted data bag supported).
 
 Attributes
 ==========
