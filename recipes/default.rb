@@ -1,5 +1,5 @@
-if node[:ssh_keys]
-  node[:ssh_keys].each do |node_user, bag_users|
+if node['ssh_keys']
+  node['ssh_keys'].each do |node_user, bag_users|
     next unless node_user
     next unless bag_users
 
@@ -23,7 +23,7 @@ if node[:ssh_keys]
       end
 
       Array(bag_users_list).each do |bag_user|
-        data = node[:ssh_keys_use_encrypted_data_bag] ?
+        data = node['ssh_keys_use_encrypted_data_bag'] ?
           Chef::EncryptedDataBagItem.load('users', bag_user) :
           data_bag_item('users', bag_user)
 
@@ -44,13 +44,13 @@ if node[:ssh_keys]
       if ssh_keys.length > 0
         home_dir = user['dir']
 
-        if node[:ssh_keys_skip_missing_home] and not File.exists?(home_dir)
+        if node['ssh_keys_skip_missing_home'] and not File.exists?(home_dir)
           next
         end
 
         authorized_keys_file = "#{home_dir}/.ssh/authorized_keys"
 
-        if node[:ssh_keys_keep_existing] && File.exist?(authorized_keys_file)
+        if node['ssh_keys_keep_existing'] && File.exist?(authorized_keys_file)
           Chef::Log.info("Keep authorized keys from: #{authorized_keys_file}")
 
           # Loading existing keys
@@ -63,7 +63,7 @@ if node[:ssh_keys]
           ssh_keys.uniq!
         else
           # Creating ".ssh" directory
-          if node[:ssh_keys_create_missing_home]
+          if node['ssh_keys_create_missing_home']
             directory "#{home_dir}/.ssh" do
               owner user['uid']
               group user['gid'] || user['uid']
