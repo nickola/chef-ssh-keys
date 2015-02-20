@@ -39,7 +39,7 @@ if node['ssh_keys']
               ssh_keys += Array(search_user['ssh_keys'])
             end
           else
-            Chef::Log.warn("This recipe uses search for users detection by groups. Chef Solo does not support search.")
+            Chef::Log.warn("[ssh-keys] This recipe uses search for users detection by groups. Chef Solo does not support search.")
           end
         end
       end
