@@ -34,8 +34,12 @@ if node['ssh_keys']
 
       if not bag_users.kind_of?(String) and not bag_users.kind_of?(Array) and bag_users['groups'] != nil
         Array(bag_users['groups']).each do |group_name|
-          search(:users, 'groups:' + group_name) do |user|
-            ssh_keys += Array(user['ssh_keys'])
+          if not Chef::Config[:solo]
+            search(:users, 'groups:' + group_name) do |search_user|
+              ssh_keys += Array(search_user['ssh_keys'])
+            end
+          else
+            Chef::Log.warn("This recipe uses search for users detection by groups. Chef Solo does not support search.")
           end
         end
       end
